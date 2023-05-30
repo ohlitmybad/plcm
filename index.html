@@ -498,7 +498,529 @@ width: 120px;
   </div>
 <svg id="scatter-plot"></svg>
 <script>
-  var csvData = `ID,Player,Minutes played,Duels per 90,Duels won %,Successful defensive actions per 90,Defensive duels per 90,Defensive duels won %,Aerial duels per 90,Aerial duels won %,PAdj Sliding tackles,Shots blocked per 90,PAdj Interceptions,Fouls per 90,Yellow cards per 90,Red cards per 90,Successful attacking actions per 90,Goals per 90,Non-penalty goals per 90,xG per 90,Shots per 90,Shots on target %,Assists per 90,Accurate crosses %,Dribbles per 90,Successful dribbles %,Offensive duels per 90,Offensive duels won %,Touches in box per 90,Progressive runs per 90,Accelerations per 90,Received passes per 90,Fouls suffered per 90,Passes per 90,Accurate passes %,Forward passes per 90,Accurate forward passes %,Back passes per 90,Accurate back passes %,Short / medium passes per 90,Accurate short / medium passes %,Long passes per 90,Accurate long passes %,Average pass length m,xA per 90,Shot assists per 90,Second assists per 90,Key passes per 90,Passes to final third per 90,Accurate passes to final third %,Passes to penalty area per 90,Accurate passes to penalty area %,Through passes per 90,Accurate through passes %,Deep completions per 90,Deep completed crosses per 90,Progressive passes per 90,Accurate progressive passes %,Direct free kicks per 90,Direct free kicks on target %,Penalties taken,Penalty conversion %
+
+<html>
+<head>
+
+	  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
+     crossorigin="anonymous"></script>	
+
+	<link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
+	<meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@DataMB_">
+    <meta name="twitter:title" content="DataMB | Compare PL Goalkeepers">
+    <meta name="twitter:description" content="Generate scatter plots of PL keepers">
+    <meta name="twitter:image" content="https://i.imgur.com/p43wTxg.png">
+    <meta property="og:image" content="https://i.imgur.com/p43wTxg.png">
+	
+	<title translate="no">DataMB | Compare PL Goalkeepers</title>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+
+<style>
+
+
+	
+  /* Dark Mode Styles */
+  body.dark-mode,
+  body.dark-mode * {
+    color: #f2f2f2;
+  }
+
+  body.dark-mode {
+    background-color: #0F0F0E;
+  }
+
+body.dark-mode .tooltip {
+  color: #000000; /* Set the font color to black in dark mode */
+  background-color: #f9f9f9;
+  border: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 12px;
+}
+
+
+
+ body.dark-mode #search-bar {
+    color: #000; /* Specify the desired text color for dark mode */
+background-color : #999
+  }
+
+  body.dark-mode svg .x-label {
+    /* Override SVG text color */
+    fill: #f2f2f2;
+  }
+
+
+  body.dark-mode svg .y-label {
+    /* Override SVG text color */
+    fill: #f2f2f2;
+  }
+
+body.dark-mode select {
+  color: #f2f2f2; /* Set the text color to a light color in dark mode */
+  background-color: #333333; /* Set the background color to a dark color in dark mode */
+}
+
+
+body.dark-mode .player-name {
+  fill: #ffffff; /* Set the fill color to white in dark mode */
+}
+
+body.dark-mode button {
+  /* Override button background color */
+  background-color: #333333;
+}
+
+body.dark-mode button,
+body.dark-mode button:focus {
+  /* Override button text color */
+  color: #f2f2f2;
+}
+
+body.dark-mode button:hover {
+  /* Preserve button hover property */
+  color: initial;
+}
+
+body.dark-mode .button-8 {
+  /* Override button background color */
+  background-color: #13293d; /* Dark blue color */
+  color: #f2f2f2; /* Off-white color */
+}
+
+body.dark-mode .button-8:hover,
+body.dark-mode .button-8:focus {
+  /* Override button hover and focus state */
+  background-color: #3a6ea5; /* Darker blue color */
+  color: #f2f2f2; /* Off-white color */
+}
+
+body.dark-mode .button-8:hover,
+body.dark-mode .button-8:focus {
+  /* Override button hover and focus state */
+  background-color: #3a6ea5; /* Darker blue color */
+  color: #f2f2f2; /* Off-white color */
+}
+
+
+ .dark-mode-toggle {
+    position: absolute;
+    top: 716.5px;
+    left: 630px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #e0e0de;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  }
+
+
+.dark-mode-toggle .toggle-icon::before {
+  content: "\263D"; /* Unicode character for sun symbol */
+  font-size: 24px; /* Adjust the font size as needed */
+}
+
+body.dark-mode .dark-mode-toggle {
+  background-color: #333333;
+}
+
+
+
+
+body.dark-mode .dark-mode-toggle .toggle-icon::before {
+  font-family: "Ionicons";
+  content: "\f3b0"; /* Unicode value for the sun icon in Ionicons */
+}
+
+
+
+
+body.dark-mode .toggle-slider {
+  background-color: #2B2C2E; /* Darker background color for dark mode */
+}
+
+body.dark-mode input:checked + .toggle-slider:before {
+  background-color: #ccc; /* Darker background color for dark mode */
+}
+
+
+circle.highlighted {
+  stroke: #ff00ff;
+  stroke-width: 3px;
+}
+
+
+
+circle {
+  cursor: pointer;
+}
+
+.button-1 {
+  align-items: center;
+  background-color: #F9F9F9;
+  border-radius: 25px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  color: #121212;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter,sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .1s,-webkit-box-shadow .1s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  position: absolute;
+  top: 70px;
+  left: 1150px;
+  width: 120px; 
+ 
+  touch-action: manipulation;
+}
+
+.button-1:hover {
+  box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
+}
+
+
+.button-2 {
+  align-items: center;
+  background-color: #F9F9F9;
+  border-radius: 25px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  color: #121212;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter,sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .1s,-webkit-box-shadow .1s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  position: absolute;
+  top: 135px;
+  left: 1150px;
+width: 120px; 
+ 
+  touch-action: manipulation;
+}
+
+.button-2:hover {
+   box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
+}
+
+.button-3 {
+  align-items: center;
+  background-color: #F9F9F9;
+  border-radius: 25px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  color: #121212;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter,sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .1s,-webkit-box-shadow .1s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  position: absolute;
+  top: 200px;
+  left: 1150px;
+width: 120px;
+ 
+  touch-action: manipulation;
+}
+
+.button-3:hover {
+   box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
+}
+
+.button-4 {
+  align-items: center;
+  background-color: #F9F9F9;
+  border-radius: 25px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  color: #121212;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter,sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .1s,-webkit-box-shadow .1s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  position: absolute;
+  top: 265px;
+  left: 1150px;
+width: 120px;
+ 
+  touch-action: manipulation;
+}
+
+.button-4:hover {
+   box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
+}
+
+.button-5 {
+  align-items: center;
+  background-color: #F9F9F9;
+  border-radius: 25px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  color: #121212;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter,sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .1s,-webkit-box-shadow .1s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  position: absolute;
+  top: 330px;
+  left: 1150px;
+width: 120px; 
+ 
+  touch-action: manipulation;
+}
+
+.button-5:hover {
+   box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
+}
+
+
+.button-6 {
+  align-items: center;
+  background-color: #F9F9F9;
+  border-radius: 25px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  color: #121212;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter,sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .1s,-webkit-box-shadow .1s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  position: absolute;
+  top: 395px;
+  left: 1150px;
+width: 120px;
+ 
+  touch-action: manipulation;
+}
+
+.button-6:hover {
+  box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
+}
+
+
+.button-7 {
+  align-items: center;
+  background-color: #F9F9F9;
+  border-radius: 25px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  color: #121212;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter,sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .1s,-webkit-box-shadow .1s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  position: absolute;
+  top: 460px;
+  left: 1150px;
+width: 120px;
+ 
+  touch-action: manipulation;
+}
+
+.button-7:hover {
+  box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
+}
+
+.button-9 {
+  align-items: center;
+  background-color: #F9F9F9;
+  border-radius: 25px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  color: #121212;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter,sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .1s,-webkit-box-shadow .1s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  position: absolute;
+  top: 525px;
+  left: 1150px;
+width: 120px;
+ 
+  touch-action: manipulation;
+}
+
+.button-9:hover {
+  box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
+}
+
+.button-8 {
+  align-items: center;
+  background-color: #1DA1F2;
+  border-radius: 25px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter,sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .1s,-webkit-box-shadow .1s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  position: absolute;
+  top: 590px;
+  left: 1150px;
+ width: 120px; 
+  touch-action: manipulation;
+}
+
+.button-8:hover {
+  box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
+}
+
+
+#search-bar {
+    position: absolute;
+    top: 726px; /* Adjust the desired top position */
+    left: 730px; /* Adjust the desired left position */
+  }
+
+  #search-bar::placeholder {
+    color: #fff; /* Specify the desired color for the placeholder text */
+  }
+</style>
+	
+</head>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PSBMXX80EF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PSBMXX80EF');
+</script>
+
+<body>
+	
+	<div class="dark-mode-toggle" onclick="toggleDarkMode()">
+    <div class="toggle-icon"></div>
+  </div>
+<svg id="scatter-plot"></svg>
+<input type="text" id="search-bar" placeholder="Search player...">
+<script>
+   var csvData = `ID,Player,Minutes played,Duels per 90,Duels won %,Successful defensive actions per 90,Defensive duels per 90,Defensive duels won %,Aerial duels per 90,Aerial duels won %,PAdj Sliding tackles,Shots blocked per 90,PAdj Interceptions,Fouls per 90,Yellow cards per 90,Red cards per 90,Successful attacking actions per 90,Goals per 90,Non-penalty goals per 90,xG per 90,Shots per 90,Shots on target %,Assists per 90,Accurate crosses %,Dribbles per 90,Successful dribbles %,Offensive duels per 90,Offensive duels won %,Touches in box per 90,Progressive runs per 90,Accelerations per 90,Received passes per 90,Fouls suffered per 90,Passes per 90,Accurate passes %,Forward passes per 90,Accurate forward passes %,Back passes per 90,Accurate back passes %,Short / medium passes per 90,Accurate short / medium passes %,Long passes per 90,Accurate long passes %,Average pass length m,xA per 90,Shot assists per 90,Second assists per 90,Key passes per 90,Passes to final third per 90,Accurate passes to final third %,Passes to penalty area per 90,Accurate passes to penalty area %,Through passes per 90,Accurate through passes %,Deep completions per 90,Deep completed crosses per 90,Progressive passes per 90,Accurate progressive passes %,Direct free kicks per 90,Direct free kicks on target %,Penalties taken,Penalty conversion %
 1,J. Lingard,1005,10.66,39.5,3.31,3.76,47.62,0.81,55.56,0.21,0.09,1.56,0.72,0.09,0,1.16,0,0,0.11,0.99,18.18,0,62.5,1.07,33.33,3.22,44.44,1.7,1.25,0.54,20.15,0.72,24,83.58,7.16,70,5.37,95,21.94,86.94,1.43,43.75,15.44,0.05,0.72,0,0.36,3.67,75.61,0.99,63.64,0.54,16.67,0.54,0.36,3.76,71.43,0,0,0,0
 2,J. Rothwell,1018,10.79,48.36,7.16,6.45,57.53,0.35,0,0.5,0.35,3.38,1.41,0.18,0,1.41,0,0,0.03,0.27,66.67,0.09,60,1.41,56.25,3.01,41.18,0.35,1.15,0.88,21.75,0.09,32.89,87.9,7.69,71.26,5.66,100,29.71,91.37,2.74,54.84,16.18,0.11,0.71,0,0.18,3.71,66.67,1.68,63.16,0.53,50,0.71,0.27,3.54,72.5,0.09,100,0,0
 3,L. Dendoncker,1029,13.64,51.92,8.57,5.6,73.44,3.06,37.14,0.13,0.17,6.36,0.09,0,0,0.61,0,0,0.04,0.44,40,0,25,0.44,80,1.92,36.36,0.79,0.44,0.17,20.38,0.09,30.52,89.68,6.3,76.39,6.47,98.65,28.78,92.71,1.4,43.75,14.7,0.01,0.26,0,0,3.41,84.62,0.26,33.33,0.09,0,0.26,0.09,3.06,60,0,0,0,0
@@ -571,6 +1093,315 @@ width: 120px;
 70,D. Rice,3333,13.53,58.88,9.61,5.32,70.05,2.11,56.41,0.58,0.38,5.74,0.62,0.14,0,1.51,0.08,0.08,0.06,0.84,25.81,0.03,30.77,1.67,59.68,3.67,51.47,0.54,1.73,1.11,32.59,0.24,48.63,89.17,15.26,81.77,5.89,94.5,43.58,92.63,4.46,63.03,19.13,0.06,0.49,0.08,0.11,8.1,85,1.35,38,0.46,35.29,0.38,0.32,6.83,76.28,0,0,1,0
 71,P. Højbjerg,3338,14.67,50.74,8.68,5.85,56.68,1.05,53.85,0.62,0.51,6.27,0.97,0.13,0,1.75,0.11,0.11,0.06,0.86,28.13,0.11,60,1.75,53.85,5.45,45.05,0.75,1.11,0.46,42.9,0.92,55.78,89.66,15.45,77.49,8.76,94.77,49.93,92.71,5.34,64.14,19.31,0.05,0.4,0.05,0.32,8.39,78.46,1.48,63.64,1,40.54,0.73,0.3,7.82,80,0,0,0,0
 72,J. Ward-Prowse,3421,13.26,51.98,7.95,6.29,61.92,2.66,46.53,0.23,0.18,4.85,0.82,0.13,0,1.47,0.21,0.16,0.14,1.1,42.86,0.08,36.92,0.63,45.83,2.05,41.03,0.58,0.37,0.18,31.67,0.42,44.28,86.16,12.73,74.59,7.34,97.13,39.62,91.37,3.03,43.48,17.55,0.16,1.68,0.08,0.34,6.84,77.31,2.21,47.62,0.39,26.67,0.53,0.66,5.81,79.64,0.45,35.29,4,50`;
+
+
+  var rows = csvData.trim().split('\n');
+  var header = rows[0].split(',');
+  var data = rows.slice(1).map(function(row) {
+    return row.split(',').map(function(d) {
+      return parseFloat(d);
+    });
+  });
+
+  var margin = { top: 40, right: 80, bottom: 100, left: 100 };
+  var width = 1080 - margin.left - margin.right;
+  var height = 720 - margin.top - margin.bottom;
+
+// select the container element and set its position to relative
+var container = d3.select("body")
+  .append("div")
+  .style("position", "relative");
+
+// create the first select element and position it to the left of the container
+var selectX = container.append("select")
+  .attr("id", "select-x")
+  .on("change", updateChart)
+  .style("position", "absolute")
+  .style("left", "80px")
+  .style("top", "0px");
+
+// create the second select element and position it to the right of the container
+var selectY = container.append("select")
+  .attr("id", "select-y")
+  .on("change", updateChart)
+  .style("position", "absolute")
+  .style("left", "330px")
+  .style("top", "0px");
+
+
+  header.slice(2).forEach(function(metric) {
+    selectX.append("option")
+      .text(metric)
+      .attr("value", metric);
+    selectY.append("option")
+      .text(metric)
+      .attr("value", metric);
+  });
+
+  var svg = d3.select("#scatter-plot")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var xMetric = header[2];
+  var yMetric = header[2];
+
+  var xScale = d3.scaleLinear()
+    .domain([0, d3.max(data, function(d) { return d[2]; })])
+    .range([0, width]);
+  var yScale = d3.scaleLinear()
+    .domain([0, d3.max(data, function(d) { return d[2]; })])
+    .range([height, 0]);
+
+var xAxis = d3.axisBottom(xScale)
+  .tickSize(0); 
+var yAxis = d3.axisLeft(yScale)
+  .tickSize(0); 
+
+var xExtent = d3.extent(data, function(d) { return d[header.indexOf(xMetric)]; });
+var yExtent = d3.extent(data, function(d) { return d[header.indexOf(yMetric)]; });
+
+svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(xAxis)
+  .selectAll("text")
+  .remove();
+
+svg.append("g")
+  .call(yAxis)
+  .selectAll("text")
+  .remove();
+
+svg.append("text")
+  .attr("class", "x-label")
+  .attr("text-anchor", "end")
+  .attr("x", width)
+  .attr("y", height + margin.top)
+  .text(header[2])
+  .style("font-family", "Arial")
+  .style("font-size", "12px");
+
+
+svg.append("text")
+  .attr("class", "y-label")
+  .attr("text-anchor", "end")
+  .attr("transform", "rotate(-90)")
+  .attr("y", -35)
+  .attr("x", 0)
+  .text(header[2])
+  .style("font-family", "Arial")
+  .style("font-size", "12px");
+
+
+svg.append("g")
+  .attr("class", "x-axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(xScale).tickSize(0));
+
+svg.append("g")
+  .attr("class", "y-axis")
+  .call(d3.axisLeft(yScale).tickSize(0));
+
+
+var tooltip = d3.select("body")
+  .append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
+
+tooltip.style("position", "absolute")
+  .style("background-color", "#f9f9f9")
+  .style("border", "solid")
+  .style("border-width", "1px")
+  .style("border-radius", "5px")
+  .style("padding", "10px")
+  .style("font-size", "12px");
+	
+	document.addEventListener('touchstart', function(event) {
+  // Check if the touch event target is the tooltip or one of its child elements
+  if (!tooltip.contains(event.target)) {
+    // Hide the tooltip if the touch event target is not the tooltip or one of its child elements
+    tooltip.style.display = 'none';
+  }
+});
+
+var names = rows.slice(1).map(function(row) {
+  return row.split(',')[1];
+});
+
+var searchBar = document.getElementById("search-bar");
+
+searchBar.addEventListener("input", function() {
+  var searchTerm = searchBar.value.toLowerCase();
+
+  if (searchTerm === '') {
+    resetSearch();
+    return;
+  }
+
+  circles.classed("highlighted", false);
+
+  circles.filter(function(d, i) {
+      return names[i].toLowerCase().includes(searchTerm);
+    })
+    .classed("highlighted", true);
+});
+
+
+
+var clickedCircles = []; // array to keep track of clicked circles
+
+var circles = svg.selectAll("circle")
+  .data(data)
+  .enter()
+  .append("circle")
+  .attr("cx", function(d) { return xScale(d[header.indexOf(xMetric)]); })
+  .attr("cy", function(d) { return yScale(d[header.indexOf(yMetric)]); })
+  .attr("r", 8)
+  .style("fill", "steelblue")
+  .on("mouseover", function(d, i) {
+    d3.select(this)
+      .classed("hovered", true)
+      .style("fill", "red");
+      
+    tooltip.transition()
+      .duration(200)
+      .style("opacity", .9);
+    tooltip.html(names[i] + "<br/>" + xMetric + ": " + d[header.indexOf(xMetric)] + "<br/>" + yMetric + ": " + d[header.indexOf(yMetric)])
+      .style("left", (d3.event.pageX + 10) + "px")
+      .style("top", (d3.event.pageY - 28) + "px");
+  })
+  .on("mouseout", function(d) {
+    if (!d3.select(this).classed("clicked")) {
+      d3.select(this)
+        .classed("hovered", false)
+        .style("fill", "steelblue");
+    }
+    
+    tooltip.transition()
+      .duration(500)
+      .style("opacity", 0);
+  })
+  .on("click", function(d, i) {
+    var clickedIndex = clickedCircles.indexOf(i);
+    if (clickedIndex === -1) {
+      // circle is not already clicked
+      clickedCircles.push(i); // add to clickedCircles array
+      d3.select(this)
+        .classed("clicked", true) // apply the "clicked" class
+        .classed("hovered", false)
+        .style("fill", "red");
+svg.append("text")
+   .attr("x", xScale(d[header.indexOf(xMetric)]) - 20)
+   .attr("y", yScale(d[header.indexOf(yMetric)]) + 20)
+   .text(names[i])
+   .classed("player-name", true)
+   .style("font-family", "Arial")
+   .style("font-size", "12px");
+
+    } else {
+      // circle is already clicked
+      clickedCircles.splice(clickedIndex, 1); // remove from clickedCircles array
+      d3.select(this)
+        .classed("clicked", false) // remove the "clicked" class
+        .classed("hovered", false)
+        .style("fill", "steelblue");
+      d3.selectAll(".player-name")
+        .filter(function() {
+          return d3.select(this).text() === names[i];
+        })
+        .remove();
+    }
+  });
+
+
+
+
+
+function updateChart() {
+  svg.selectAll("text.player-name").remove();
+  xMetric = selectX.property("value");
+  yMetric = selectY.property("value");
+
+
+xScale.domain(d3.extent(data, function(d) { return d[header.indexOf(xMetric)]; })).nice();
+yScale.domain(d3.extent(data, function(d) { return d[header.indexOf(yMetric)]; })).nice();
+
+
+  svg.select(".x-label")
+    .text(xMetric);
+
+  svg.select(".y-label")
+    .text(yMetric);
+
+  circles.transition()
+    .duration(1000)
+    .attr("cx", function(d) { return xScale(d[header.indexOf(xMetric)]); })
+    .attr("cy", function(d) { return yScale(d[header.indexOf(yMetric)]); });
+
+  svg.select(".x-axis")
+    .transition()
+    .duration(1000)
+    .call(d3.axisBottom(xScale).tickSize(0));
+
+  svg.select(".y-axis")
+    .transition()
+    .duration(1000)
+    .call(d3.axisLeft(yScale).tickSize(0));
+}
+
+
+function resetSearch() {
+  searchBar.value = '';
+  circles.classed("highlighted", false);
+}
+
+
+</script>
+
+<a href="https://datamb.football/plots/" target="_blank" rel="noopener noreferrer">
+  <button class="button-1" role="button">Home</button>
+<a href="https://datamb.football/gkpl/" target="_blank" rel="noopener noreferrer">
+  <button class="button-2" role="button">Goalkeepers</button>
+<a href="https://datamb.football/plcb/" target="_blank" rel="noopener noreferrer">
+  <button class="button-3" role="button">Centrebacks</button>
+<a href="https://datamb.football/plfb/" target="_blank" rel="noopener noreferrer">
+  <button class="button-4" role="button">Fullbacks</button>
+<a href="https://datamb.football/plcm/" target="_blank" rel="noopener noreferrer">
+  <button class="button-5" role="button">Midfielders</button>
+<a href="https://datamb.football/plfw/" target="_blank" rel="noopener noreferrer">
+  <button class="button-6" role="button">Wingers</button>
+<a href="https://datamb.football/plst/" target="_blank" rel="noopener noreferrer">
+  <button class="button-7" role="button">Strikers</button>
+	<a href="https://datamb.football/radars/" target="_blank" rel="noopener noreferrer">
+  <button class="button-9" role="button">Radars</button>
+<a href="https://twitter.com/DataMB_" target="_blank" rel="noopener noreferrer">
+  <button class="button-8" role="button">@DataMB_</button>
+</a>
+<script>
+
+    // Function to toggle dark mode
+    function toggleDarkMode() {
+      const body = document.querySelector("body");
+      body.classList.toggle("dark-mode");
+
+      // Store the user's preference in local storage
+      const isDarkMode = body.classList.contains("dark-mode");
+      localStorage.setItem("darkMode", isDarkMode);
+    }
+
+    // Check if user has a stored preference for dark mode
+    const storedDarkMode = localStorage.getItem("darkMode");
+
+    if (storedDarkMode === "true") {
+      const body = document.querySelector("body");
+      body.classList.add("dark-mode");
+    }
+
+  </script>
+
+</body>
+</html>
 
   var rows = csvData.trim().split('\n');
   var header = rows[0].split(',');
